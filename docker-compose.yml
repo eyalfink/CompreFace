@@ -1,11 +1,14 @@
 version: '3.4'
 
-volumes:
-  postgres-data:
+# volumes:
+#   postgres-data:
+#     external: true
+
 
 services:
   compreface-postgres-db:
-    image: ${registry}compreface-postgres-db:${POSTGRES_VERSION}
+    #image: ${registry}compreface-postgres-db:${POSTGRES_VERSION}
+    image: postgres:11.5
     restart: always
     container_name: "compreface-postgres-db"
     environment:
@@ -13,7 +16,7 @@ services:
       - POSTGRES_PASSWORD=${postgres_password}
       - POSTGRES_DB=${postgres_db}
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - /Users/eyal/compre_face_data:/var/lib/postgresql/data
 
   compreface-admin:
     restart: always
@@ -66,7 +69,15 @@ services:
 
   compreface-core:
     restart: always
-    image: ${registry}compreface-core:${CORE_VERSION}
+
+    #image: ${registry}compreface-core:${CORE_VERSION}
+    image: compreface-core:eyal
     container_name: "compreface-core"
     environment:
       - ML_PORT=3000
+    privileged: true
+    devices:
+      - /dev/cu.usbmodem14202
+    volumes:
+      - /Users/eyal/compre_face_data:/var/lib/postgresql/data
+      #- /dev:/dev

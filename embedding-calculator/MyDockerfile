@@ -1,0 +1,5 @@
+FROM exadel/compreface-core:1.0.0
+
+RUN pip --no-cache-dir install pyserial
+
+COPY src src

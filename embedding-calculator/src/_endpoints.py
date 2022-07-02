@@ -27,6 +27,8 @@ from src.services.imgtools.read_img import read_img
 from src.services.utils.pyutils import Constants
 import base64
 
+from src import face_deteced_hook
+
 
 def endpoints(app):
     @app.route('/status')
@@ -73,6 +75,7 @@ def endpoints(app):
         )
         plugins_versions = {p.slug: str(p) for p in [detector] + face_plugins}
         faces = _limit(faces, request.values.get(ARG.LIMIT))
+        face_deteced_hook.handle_faces(faces)
         return jsonify(plugins_versions=plugins_versions, result=faces)
 
     @app.route('/scan_faces', methods=['POST'])
